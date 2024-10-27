@@ -12,9 +12,9 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 # Firebase API keys
-FIREBASE_API_KEY = "AIzaSyAY6OYwufQqktf01Y4tkDQ3Tq5VzAkmeV8"
-FIREBASE_PROJECT_ID = "chatwebapp-25f1f"
-FIREBASE_AUTH_URL = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_API_KEY}"
+FIREBASE_API_KEY = 'API_KEY'
+FIREBASE_PROJECT_ID = 'PROJECT_ID'
+FIREBASE_AUTH_URL = 'AUTH_URL'
 
 # Flask routes
 @app.route('/')
