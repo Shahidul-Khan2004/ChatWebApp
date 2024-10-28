@@ -26,8 +26,8 @@ FIREBASE_DATABASE_URL = os.getenv('DatabaseURL')
 # Flask routes
 @app.route('/')
 def home():
-    if 'user' in session:
-        return redirect('/chat')
+    print("Session contents:", session)
+    
     return render_template('login.html')
 
 
@@ -74,8 +74,6 @@ def register():
         return redirect('/chat')
         
     return render_template('register.html')
-
-    
 
 
 @app.route('/login', methods=['POST'])
@@ -151,7 +149,7 @@ def send_message():
         'user': user,
         'name': name,
         'message': message,
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now().strftime('%d-%m-%Y at %I:%M:%S %p')
     }
 
     response = requests.post(f"{FIREBASE_DATABASE_URL}messages.json?auth={id_token}", json=payload)
@@ -176,8 +174,7 @@ def send_message():
 
 @app.route('/logout')
 def logout():
-    session.pop('user', None)
-    session.pop('idToken', None)
+    session.clear()
     return redirect('/')
 
 def refresh_id_token():
@@ -191,8 +188,8 @@ def refresh_id_token():
     new_tokens = refresh_response.json()
 
     if 'id_token' in new_tokens:
-        session['idToken'] = new_tokens['id_token']  # Update the idToken
-        session['refreshToken'] = new_tokens.get('refresh_token', refresh_token)  # Update refreshToken if provided
+        session['idToken'] = new_tokens['id_token']  
+        session['refreshToken'] = new_tokens.get('refresh_token', refresh_token)  
 
     return new_tokens
 
