@@ -13,7 +13,7 @@ db = firestore.client()
 
 # Firebase API keys
 FIREBASE_API_KEY = 'API_KEY'
-FIREBASE_PROJECT_ID = 'PROJECT_ID'
+FIREBASE_DATABASE_URL = 'DatabaseURL'
 FIREBASE_AUTH_URL = 'AUTH_URL'
 
 # Flask routes
@@ -24,26 +24,31 @@ def home():
     return render_template('login.html')
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    email = request.form['email']
-    password = request.form['password']
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
 
-    # Firebase API for user sign-up
-    payload = {
-        "email": email,
-        "password": password,
-        "returnSecureToken": True
-    }
-    register_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={FIREBASE_API_KEY}"
-    response = requests.post(register_url, json=payload)
-    data = response.json()
+        # Firebase registration
+        registration_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={FIREBASE_API_KEY}"
+        payload = {
+            "email": email,
+            "password": password,
+            "returnSecureToken": True
+        }
+        response = requests.post(registration_url, json=payload)
+        data = response.json()
 
-    if 'idToken' in data:
-        # Automatically log in after registration
-        session['user'] = data['email']
-        return redirect('/chat')
-    return 'Registration Failed', 401
+        if 'idToken' in data:
+            # Registration successful, log in the user automatically
+            session['user'] = data['email']
+            session['idToken'] = data['idToken']
+            return redirect('/chat')
+        return 'Registration Failed', 401
+
+    return render_template('register.html')
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -69,28 +74,38 @@ def chat():
     if 'user' not in session:
         return redirect('/')
     
-    # Fetch messages from Firestore
-    messages_ref = db.collection('messages').stream()
-    messages = [{'user': msg.get('user'), 'message': msg.get('message')} for msg in messages_ref]
+    # Fetch messages from Firebase Realtime Database
+    response = requests.get(f"{FIREBASE_DATABASE_URL}/messages.json")
+    messages = response.json() or {}
+    messages_list = [{'user': msg['user'], 'message': msg['message']} for msg in messages.values()]
+
     
-    return render_template('chat.html', user=session['user'], messages=messages)
+    return render_template('chat.html', user=session['user'], messages=messages_list)
 
 
 @app.route('/send_message', methods=['POST'])
 def send_message():
     message = request.form['message']
     user = session['user']
+    id_token = session['idToken']
 
-    # Store message in Firestore
-    db.collection('messages').add({
+    # Store message in Firebase Realtime Database
+    payload = {
         'user': user,
         'message': message
-    })
+    }
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {id_token}'
+    }
+    requests.post(f"{FIREBASE_DATABASE_URL}/messages.json", json=payload, headers=headers)
+    
     return redirect('/chat')
 
 @app.route('/logout')
 def logout():
     session.pop('user', None)
+    session.pop('idToken', None)
     return redirect('/')
 
 if __name__ == '__main__':
