@@ -11,7 +11,7 @@
 
     <div id="messages">
         {% for message in messages %}
-            <p><strong>{{ message['user'] }}:</strong> {{ message['message'] }}</p>
+            <p><strong>{{ message['user'] }}:</strong><br> {{ message['message'] }} <br> <em>{{ message['timestamp'] }}</em></p>
         {% endfor %}
     </div>
 

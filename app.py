@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, session
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 import requests
+import json
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'Key'
@@ -27,12 +29,14 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
+        name = request.form['name']
         email = request.form['email']
         password = request.form['password']
 
         # Firebase registration
         registration_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={FIREBASE_API_KEY}"
         payload = {
+            "displayName": name,
             "email": email,
             "password": password,
             "returnSecureToken": True
@@ -43,6 +47,7 @@ def register():
         if 'idToken' in data:
             # Registration successful, log in the user automatically
             session['user'] = data['email']
+            session['name'] = data['displayName']
             session['idToken'] = data['idToken']
             return redirect('/chat')
         return 'Registration Failed', 401
@@ -73,34 +78,51 @@ def login():
 def chat():
     if 'user' not in session:
         return redirect('/')
-    
-    # Fetch messages from Firebase Realtime Database
-    response = requests.get(f"{FIREBASE_DATABASE_URL}/messages.json")
-    messages = response.json() or {}
-    messages_list = [{'user': msg['user'], 'message': msg['message']} for msg in messages.values()]
 
-    
-    return render_template('chat.html', user=session['user'], messages=messages_list)
+    # Fetch messages from Firebase Realtime Database
+    url = f"{FIREBASE_DATABASE_URL}/messages.json"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        # Convert the Firebase data into a list of dictionaries
+        messages = [
+            {
+                'user': msg_data['user'],
+                'message': msg_data['message'],
+                'timestamp': msg_data['timestamp']
+            }
+            for msg_data in data.items()
+        ]
+        # Sort messages by timestamp
+        messages.sort(key=lambda x: x['timestamp'])
+    else:
+        messages = []
+
+    return render_template('chat.html', user=session['user'], messages=messages)
 
 
 @app.route('/send_message', methods=['POST'])
 def send_message():
     message = request.form['message']
-    user = session['user']
+    user = session['name']
     id_token = session['idToken']
 
     # Store message in Firebase Realtime Database
     payload = {
         'user': user,
-        'message': message
+        'message': message,
+        'timestamp': datetime.now().isoformat()
     }
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {id_token}'
     }
-    requests.post(f"{FIREBASE_DATABASE_URL}/messages.json", json=payload, headers=headers)
+    response = requests.post(f"{FIREBASE_DATABASE_URL}/messages.json", json=payload, headers=headers)
     
-    return redirect('/chat')
+    if response.status_code == 200:
+        return redirect('/chat')
+    else:
+        return 'Failed to send message', 500
 
 @app.route('/logout')
 def logout():
