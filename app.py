@@ -22,6 +22,12 @@ db = firestore.client()
 # Firebase API keys
 FIREBASE_API_KEY = os.getenv('API_KEY')
 FIREBASE_DATABASE_URL = os.getenv('DatabaseURL')
+FIREBASE_PROJECT_ID = os.getenv('PROJECT_ID')
+FIREBASE_AUTH_DOMAIN = os.getenv('AUTH_DOMAIN')
+FIREBASE_STORAGE_BUCKET = os.getenv('STORAGE_BUCKET')
+FIREBASE_MESSAGING_SENDER_ID = os.getenv('MESSAGING_SENDER_ID')
+FIREBASE_APP_ID = os.getenv('APP_ID')
+FIREBASE_MEASUREMENT_ID = os.getenv('MEASUREMENT_ID')
 
 # Flask routes
 @app.route('/')
@@ -128,8 +134,7 @@ def chat():
         print(f"Failed to fetch messages. Status code: {response.status_code}")
         messages = []
 
-    return render_template('chat.html', user=session.get('name', 'user'), messages=messages)
-
+    return render_template('chat.html', user=session.get('name', 'user'), messages=messages) 
 
 
 @app.route('/send_message', methods=['POST'])
@@ -139,7 +144,7 @@ def send_message():
     if 'idToken' not in session:
         return 'User is not authenticated', 401
     
-    message = request.form['message']
+    message = request.form.get['message']
     user = session['user']
     name = session['name']
     id_token = session['idToken']
