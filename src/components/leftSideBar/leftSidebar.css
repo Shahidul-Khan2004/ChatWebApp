@@ -1,5 +1,7 @@
 .ls {
-    background: #001030;
+    background: rgba(0, 0, 0, 0.846);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
     color: white;
     height: 75vh;
 }
@@ -20,7 +22,8 @@
     cursor: pointer;
 }
 .ls-search {
-    background-color: #002670;
+    background-color: #700000;
+    border-radius: 25px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -68,8 +71,36 @@
     font-size: 11px;
 }
 .friends:hover {
-    background-color: red;
+    background-color: rgb(225, 22, 22);
 }
 .friends:hover span {
     color: white;
+}
+.ls-nav .menu {
+    position: relative;
+    padding: 10px 0px;
+}
+.menu .sub-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 130px;
+    padding: 20px;
+    background-color: #700000;
+    border-radius: 5px;
+    color: white;
+    display: none;
+}
+.sub-menu hr {
+    border: none;
+    height: 1px;
+    background-color: #a4a4a4;
+    margin: 8px 0px;
+}
+.sub-menu p {
+    cursor: pointer;
+    font-size: 14px;
+}  
+.menu:hover .sub-menu {
+    display: block;
 }

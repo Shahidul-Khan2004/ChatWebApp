@@ -1,7 +1,7 @@
 .chat-box {
     height: 75vh;
     position: relative;
-    background-color: black;
+    background-color: rgba(0, 0, 0, 0.846);
 }
 .chat-user {
     padding: 10px 15px;

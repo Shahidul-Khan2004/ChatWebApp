@@ -1,9 +1,11 @@
 .rs {
     color:white;
-    background: #001030;
+    background: rgba(0, 0, 0, 0.846);
     position: relative;
     height: 75vh;
     overflow-y: scroll;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 .rs-profile {
     padding-top: 60px;
