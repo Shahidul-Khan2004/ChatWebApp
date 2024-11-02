@@ -8,7 +8,7 @@
     width: 95%;
     height: 75vh;
     max-width: 1000px;
-    background-color: red;
+    background-color: rgb(255, 22, 22);
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
 }
