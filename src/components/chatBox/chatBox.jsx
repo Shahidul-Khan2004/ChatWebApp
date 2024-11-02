@@ -1,5 +1,5 @@
 import React from "react";
-import "./chatBox.css";
+import "./ChatBox.css";
 
 const ChatBox = () => {
     return (
