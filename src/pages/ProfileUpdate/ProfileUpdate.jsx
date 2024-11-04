@@ -14,13 +14,13 @@ const ProfileUpdate = () => {
                     <label htmlFor="avatar">
                         <input onChange={(e) => setImage(e.target.files[0])} type="file" id="avatar" accept=".png, .jpg, .jpeg" hidden/>
                         <img src= {image? URL.createObjectURL(image):assets.avatar_icon} alt="" />
-                        upload profile image
+                        upload a square profile image <br /> to avoid distortion
                     </label>
                     <input type="text" placeholder="Name" required />
                     <textarea placeholder="Bio" required></textarea>
                     <button type ="submit">Save</button>
                 </form>
-                <img className="profile-pic"src="red-chat-logo.png" alt="" />
+                <img className="profile-pic"src={image? URL.createObjectURL(image):"red-chat-logo.png"} alt="" />
             </div>
         </div>
     );

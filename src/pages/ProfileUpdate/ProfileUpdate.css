@@ -16,7 +16,7 @@
 }
 .profile-pic {
     max-width: 160px;
-    aspect-ratio: 1/1;
+    aspect-ratio: auto;
     margin: 20px auto;
 }
 .profile form {
