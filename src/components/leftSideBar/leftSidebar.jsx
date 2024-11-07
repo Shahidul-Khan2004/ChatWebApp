@@ -1,13 +1,43 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "./LeftSidebar.css";
 import assets from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../config/firebase";
+import { AppContext } from "../../context/AppContext";
 
 const LeftSidebar = () => {
 
     const navigate = useNavigate();
+    const { userData } = useContext(AppContext);
+    const [user, setUser] = useState(null);
+    const [showSearch, setShowSearch] = useState(false);
 
-    return(
+    const inputHandler = async (e) => {
+        try {
+            const input = e.target.value;
+            if (input) {
+                setShowSearch(true);
+                const userRef = collection(db, "users");
+                const q = query(userRef, where("username", "==", input.toLowerCase()));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty && querySnapshot.docs[0].data().id !== userData.id)
+                    setUser(querySnapshot.docs[0].data());
+                else {
+                    setUser(null);
+                }
+            }
+            else {
+                setShowSearch(false);
+            }
+
+        } catch (error) {
+
+        }
+    }
+
+    return (
         <div className="ls">
             <div className="ls-top">
                 <div className="ls-nav">
@@ -23,11 +53,16 @@ const LeftSidebar = () => {
                 </div>
                 <div className="ls-search">
                     <img src={assets.search_icon} alt="search" />
-                    <input type="text" placeholder="Search" />
+                    <input onChange={inputHandler} type="text" placeholder="Search" />
                 </div>
             </div>
             <div className="ls-list">
-                {Array(12).fill("").map((item, index) => (
+                {showSearch && user
+                ? <div className="friends add-user">
+                    <img src={user.avatar} />
+                    <p>{user.name}</p>
+                </div>
+                :Array(12).fill("").map((item, index) => (
                     <div key={index} className="friends">
                         <img src={assets.profile_img} alt="profile" />
                         <div>
@@ -35,7 +70,8 @@ const LeftSidebar = () => {
                             <span>Online</span>
                         </div>
                     </div>
-                ))}
+                ))
+                }
             </div>
         </div>
     )

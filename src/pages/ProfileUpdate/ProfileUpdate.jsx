@@ -64,7 +64,7 @@ const ProfileUpdate = () => {
                 navigate("/")
             }
         })
-    })
+    }, [])
 
     return (
         <div className="profile">

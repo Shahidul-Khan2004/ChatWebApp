@@ -16,6 +16,7 @@
 }
 .profile-pic {
     max-width: 160px;
+    max-height: 304px;
     aspect-ratio: auto;
     margin: 20px auto;
 }
@@ -37,8 +38,9 @@
 }
 .profile label img {
     width: 50px;
-    aspect-ratio: 1/1;
+    height: 50px;
     border-radius: 50%;
+    object-fit: cover;
 }
 .profile input, textarea {
     padding: 10px;
