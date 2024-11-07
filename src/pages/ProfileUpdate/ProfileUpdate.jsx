@@ -50,6 +50,9 @@ const ProfileUpdate = () => {
                 setUid(user.uid)
                 const docRef = doc(db, "users", user.uid);
                 const docSnap = await getDoc(docRef);
+                if (docSnap.data().avatar) {
+                    setPrevImage(docSnap.data().avatar);
+                }
                 if (docSnap.data().name) {
                     setName(docSnap.data().name);
                 }
