@@ -13,3 +13,7 @@
     border-radius: 15px;
     grid-template-columns: 1fr 2fr 1fr;
 }
+.loading {
+    font-size: 50px;
+    color: white;
+}

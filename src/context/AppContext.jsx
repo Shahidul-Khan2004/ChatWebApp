@@ -6,10 +6,13 @@ import { useNavigate } from "react-router-dom";
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
-    
+
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
     const [chatData, setChatData] = useState(null);
+    const [messagesId, setMessagesId] = useState(null);
+    const [messages, setMessages] = useState([]);
+    const [chatUser, setChatUser] = useState(null);
 
     const loadUserData = async (uid) => {
         try {
@@ -35,7 +38,7 @@ const AppContextProvider = (props) => {
                 }
             }, 60000)
         } catch (error) {
-            
+
         }
     }
 
@@ -49,7 +52,7 @@ const AppContextProvider = (props) => {
                     const userRef = doc(db, "users", item.rId);
                     const userSnap = await getDoc(userRef);
                     const userData = userSnap.data();
-                    tempData.push({...item, userData});
+                    tempData.push({ ...item, userData })
                 }
                 setChatData(tempData.sort((a, b) => b.updatedAt - a.updatedAt));
             })
@@ -58,12 +61,15 @@ const AppContextProvider = (props) => {
                 unSub();
             }
         }
-    },[userData])
+    }, [userData])
 
     const value = {
         userData, setUserData,
         chatData, setChatData,
-        loadUserData
+        loadUserData,
+        messages, setMessages,
+        messagesId, setMessagesId,
+        chatUser, setChatUser
     }
     return (
         <AppContext.Provider value={value}>
