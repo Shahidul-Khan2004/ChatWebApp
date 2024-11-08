@@ -72,7 +72,7 @@
     font-size: 11px;
 }
 .friends:hover {
-    background-color: rgb(225, 22, 22);
+    background-color: rgba(255, 55, 55, 0.3);
 }
 .friends:hover span {
     color: white;
@@ -104,4 +104,10 @@
 }  
 .menu:hover .sub-menu {
     display: block;
+}
+.friends.border img{
+    border: 3px solid rgb(255, 30, 30);
+}
+.friends.border div span{
+    color: rgb(255, 30, 30);
 }

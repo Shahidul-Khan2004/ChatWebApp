@@ -56,7 +56,7 @@ const ChatBox = () => {
         const hour = date.getHours();
         const minutes = date.getMinutes();
         if (hour > 12) {
-            return hour-12 + ":" + minutes + " PM";
+            return hour - 12 + ":" + minutes + " PM";
         }
         else {
             return hour + ":" + minutes + " AM";
@@ -119,7 +119,7 @@ const ChatBox = () => {
         </div>
     )
         : <div className="chat-welcome">
-            <img src={assets.logo_icon} alt="" />
+            <img src="red-chat-logo.png" alt="" />
             <p>Chat anytime, anywhere</p>
         </div>
 };
