@@ -64,7 +64,7 @@ const ChatBox = () => {
     }
 
     const linkifyDecorator = (href, text, key) => (
-        <a href={href} key={key} target="_blank" rel="noopener noreferrer">
+        <a href={href} key={key} target="_blank" rel="noopener noreferrer" className="link">
             {text}
         </a>
     );
