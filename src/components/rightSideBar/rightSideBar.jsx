@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./RightSideBar.css";
 import assets from "../../assets/assets";
 import { logout } from "../../config/firebase";
+import { AppContext } from "../../context/AppContext";
 
 const RightSideBar = () => {
-    return (
+
+    const {chatUser, messages} = useContext(AppContext);
+
+    return chatUser ? (
         <div className="rs">
            <div className="rs-profile">
-            <img src={assets.profile_img} alt="profile" />
-            <h3>Richard Sanford <img src={assets.green_dot} className="dot" alt="" /></h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis asperiores earum doloremque laborum odit minima, totam dolor eaque mollitia possimus quaerat repudiandae suscipit illum, voluptatum, nobis aperiam est officiis aspernatur!</p>
+            <img src={chatUser.userData.avatar} alt="profile" />
+            <h3>{Date.now() - chatUser.userData.lastSeen <= 65000 ? <img src={assets.green_dot} className="dot" alt="" /> : null} {chatUser.userData.name}</h3>
+            <p>{chatUser.userData.bio}</p>
             </div>
             <hr />
             <button onClick={() => logout()}>logout</button>
         </div>
-    );
+    )
+    : (
+        <div className="rs">
+            <button onClick={() => logout()}>logout</button>
+        </div>
+    )
 };
 
 export default RightSideBar;

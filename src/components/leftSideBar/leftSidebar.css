@@ -111,3 +111,8 @@
 .friends.border div span{
     color: rgb(255, 30, 30);
 }
+@media (max-width: 900px) {
+    .ls {
+        width: 100%;
+    }
+}

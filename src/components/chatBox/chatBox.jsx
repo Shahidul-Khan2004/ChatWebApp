@@ -9,7 +9,7 @@ import ReactLinkify from "react-linkify";
 
 const ChatBox = () => {
 
-    const { userData, messagesId, chatUser, messages, setMessages } = useContext(AppContext);
+    const { userData, messagesId, chatUser, messages, setMessages , setChatVisible, chatVisible } = useContext(AppContext);
 
     const [input, setInput] = useState("");
 
@@ -88,11 +88,11 @@ const ChatBox = () => {
     }, [messagesId])
 
     return chatUser ? (
-        <div className="chat-box">
+        <div className={`chat-box ${chatVisible ? "" : "hidden"}`}>
             <div className="chat-user">
                 <img src={chatUser.userData.avatar} alt="" />
-                <p>{chatUser.userData.name} <img src={assets.green_dot} className="dot" alt="" /></p>
-                <img src={assets.help_icon} className="help" alt="" />
+                <p>{chatUser.userData.name} {Date.now()-chatUser.userData.lastSeen <= 65000 ? <img src={assets.green_dot} className="dot" alt="" /> : null}</p>
+                <img onClick={() => setChatVisible(false)} src={assets.arrow_icon} className="arrow" alt="" />
             </div>
 
 
@@ -118,7 +118,7 @@ const ChatBox = () => {
             </div>
         </div>
     )
-        : <div className="chat-welcome">
+        : <div className={`chat-welcome ${chatVisible ? "" : "hidden"}`}>
             <img src="red-chat-logo.png" alt="" />
             <p>Chat anytime, anywhere</p>
         </div>

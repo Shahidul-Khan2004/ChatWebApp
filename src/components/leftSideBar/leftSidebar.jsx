@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./LeftSidebar.css";
 import assets from "../../assets/assets";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 const LeftSidebar = () => {
 
     const navigate = useNavigate();
-    const { userData, chatData, chatUser, setChatUser, setMessagesId, messagesId } = useContext(AppContext);
+    const { userData, chatData, chatUser, setChatUser, setMessagesId, messagesId, chatVisible, setChatVisible } = useContext(AppContext);
     const [user, setUser] = useState(null);
     const [showSearch, setShowSearch] = useState(false);
 
@@ -78,6 +78,20 @@ const LeftSidebar = () => {
                     messageSeen: true
                 })
             })
+
+            const uSnap = await getDoc(doc(db, "users", user.id));
+            const uData = uSnap.data();
+            setChat({
+                messagesId: newMessageRef.id,
+                lastMessage: "",
+                rId: userData.id,
+                updatedAt: Date.now(),
+                messageSeen: true,
+                userData: uData
+            })
+            setShowSearch(false);
+            setChatVisible(true);
+
         } catch (error) {
             toast.error(error.message);
             console.error(error)
@@ -85,20 +99,41 @@ const LeftSidebar = () => {
     }
 
     const setChat = async (item) => {
-        setMessagesId(item.messageId);
-        setChatUser(item)
-        const userChatsRef = doc(db, "Chats", userData.id);
-        const userChatSnapshot = await getDoc(userChatsRef);
-        const userChatData = userChatSnapshot.data();
-        const chatIndex = userChatData.chatData.findIndex((c) => c.messageId === item.messageId);
-        userChatData.chatData[chatIndex].messageSeen = true;
-        await updateDoc (userChatsRef, {
-            chatData: userChatData.chatData
-        })
+        try {
+            setMessagesId(item.messageId);
+            setChatUser(item)
+            const userChatsRef = doc(db, "Chats", userData.id);
+            const userChatSnapshot = await getDoc(userChatsRef);
+            const userChatData = userChatSnapshot.data();
+            const chatIndex = userChatData.chatData.findIndex((c) => c.messageId === item.messageId);
+            userChatData.chatData[chatIndex].messageSeen = true;
+            await updateDoc(userChatsRef, {
+                chatData: userChatData.chatData
+            })
+            setChatVisible(true);
+        } catch (error) {
+            toast.error(error.message);
+        }
+
     }
 
+    useEffect(() => {
+        
+        const updateChatUserData = async () => {
+            if (chatUser) {
+                const userRef = doc(db, "users", chatUser.userData.id);
+                const userSnap = await getDoc(userRef);
+                const userData = userSnap.data();
+                setChatUser(prev => ({...prev, userData: userData}));
+            }
+        }
+
+        updateChatUserData();
+
+    },[chatData])
+
     return (
-        <div className="ls">
+        <div className={`ls ${chatVisible ? "hidden" : ""}`}>
             <div className="ls-top">
                 <div className="ls-nav">
                     <img src={assets.logo} alt="logo" className="logo" />
