@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { arrayUnion, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { AppContext } from "../../context/AppContext";
-import { toast } from "react-toastify";
+import { logout } from "../../config/firebase";
 
 const LeftSidebar = () => {
 
@@ -44,7 +44,6 @@ const LeftSidebar = () => {
             }
 
         } catch (error) {
-            toast.error(error.message);
             console.error(error)
         }
     }
@@ -93,7 +92,6 @@ const LeftSidebar = () => {
             setChatVisible(true);
 
         } catch (error) {
-            toast.error(error.message);
             console.error(error)
         }
     }
@@ -112,7 +110,7 @@ const LeftSidebar = () => {
             })
             setChatVisible(true);
         } catch (error) {
-            toast.error(error.message);
+            console.error(error);
         }
 
     }
@@ -142,7 +140,7 @@ const LeftSidebar = () => {
                         <div className="sub-menu">
                             <p onClick={() => navigate("/profile")}>Edit Profile</p>
                             <hr />
-                            <p>Logout</p>
+                            <button className="logout" onClick={() => logout()}>Logout</button>
                         </div>
                     </div>
                 </div>

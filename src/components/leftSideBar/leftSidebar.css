@@ -101,7 +101,17 @@
 .sub-menu p {
     cursor: pointer;
     font-size: 14px;
-}  
+}
+.logout {
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0; 
+    outline: none; 
+}
 .menu:hover .sub-menu {
     display: block;
 }
