@@ -1,8 +1,7 @@
-# React + Vite
+# Real-time chat application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+##[Check it out](https://chat003.netlify.app/)
 
-Currently, two official plugins are available:
+###This web-application uses react and firebase to allow real-time chat.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This is in very early stage of development. So, feel free to [Request Changes](https://shahidulislamkhan.netlify.app/contact)
