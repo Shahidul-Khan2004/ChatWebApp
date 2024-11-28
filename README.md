@@ -35,8 +35,8 @@ Follow these steps to set up the project locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YourGitHubUsername/real-time-chat-app.git
-   cd real-time-chat-app
+   git clone https://github.com/Shahidul-Khan2004/ChatWebApp.git
+   cd ChatWebApp
    ```
 
 2. Install dependencies:
@@ -81,11 +81,16 @@ Follow these steps to set up the project locally:
 real-time-chat-app/
 ├── public/          # Static assets
 ├── src/
+│   ├── assets/
 │   ├── components/  # React components
-│   ├── firebase/    # Firebase configuration
-│   ├── styles/      # CSS styles
-│   └── App.js       # Main application logic
+│   ├── config/      # Firebase configuration
+│   ├── context/
+│   ├── pages/
+│   ├── index.css
+│   ├── main.jsx
+│   └── App.js
 ├── package.json
+├── index.html 
 └── README.md
 ```
 
@@ -126,7 +131,7 @@ If you have any questions or feedback, reach out to me at:
 
 ---
 
-**Check out the app, and let’s chat!**
+**Check out the app, search me (Shahidul Islam Khan) and let’s chat!**
 ```
 
 ### Notes:
